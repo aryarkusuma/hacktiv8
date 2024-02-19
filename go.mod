@@ -1,3 +1,3 @@
-module golearn/hacktiv8
+module hacktiv8
 
 go 1.18
