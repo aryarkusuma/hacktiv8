@@ -4,7 +4,7 @@ import (
 	"fmt"
 )
 
-func sesi() {
+func Sesi() {
 
 	fmt.Println("d")
 

@@ -7,5 +7,5 @@ import (
 )
 
 func main(){
-	sesi01.print()
+	sesi01.Sesi()
 }
