@@ -3,9 +3,9 @@ package main
 
 import (
 
-	"github.com/aryarkusuma/hacktiv8/sesi1"
+	"github.com/aryarkusuma/hacktiv8/sesi01"
 )
 
 func main(){
-	sesi1()
+	sesi01.print()
 }
