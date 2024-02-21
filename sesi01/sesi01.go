@@ -6,7 +6,7 @@ import (
 
 func Sesi() {
 
-	fmt.Println("d")
+	fmt.Println("Sesi01")
 
 }
 
