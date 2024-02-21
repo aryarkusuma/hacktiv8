@@ -1,4 +1,4 @@
-pacakge sesi1
+package sesi1
 
 func main() {}
 
