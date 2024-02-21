@@ -1,4 +1,12 @@
-package sesi1
+package sesi01
 
-func main() {}
+import (
+	"fmt"
+)
+
+func sesi() {
+
+	fmt.Println("d")
+
+}
 
