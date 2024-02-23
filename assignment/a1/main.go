@@ -20,11 +20,9 @@ type UserDir struct {
 func main() {
 	var userDir UserDir
         newUser := newUser()
-
-        noUser := noUserArg()
-	
 	userDir.PreInsert(newUser)
-	
+
+        noUser := noUserArg(len(userDir.Dir))		
 	userDir.PrintUser(noUser)
 }
 
@@ -37,7 +35,7 @@ func (u *UserDir) PreInsert(data []BioUser){
 	}
 }
 
-func noUserArg() int{
+func noUserArg(userDirLen int) int{
 	lenArgs := len(os.Args)
 	if lenArgs < 2 {
 		fmt.Println("Need Argument(number) For User Index Number to Print The User Data")
@@ -49,6 +47,12 @@ func noUserArg() int{
                 fmt.Println(err)
 		os.Exit(1)
         }
+
+	if userDirLen < noUser {
+		fmt.Println("Index out of range")
+                os.Exit(1)
+	}
+
 	return noUser
 }
 
