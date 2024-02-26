@@ -48,12 +48,12 @@ func noUserArg(userDirLen int) int{
 		os.Exit(1)
         }
 
-	if userDirLen < noUser {
-		fmt.Println("Index out of range")
+	if userDirLen < noUser || noUser <= 0 {
+		fmt.Println("Selected Index is out of range")
                 os.Exit(1)
 	}
 
-	return noUser
+	return noUser - 1
 }
 
 func newUser() []BioUser{
@@ -65,8 +65,8 @@ func newUser() []BioUser{
 }
 
 func (u *UserDir) PrintUser(noUser int){
-	fmt.Println("No\t :", noUser)
-	fmt.Println("Nama\t :", (*u).Dir[noUser].name)
+	fmt.Println("No\t :", noUser + 1)
+	fmt.Println("Name\t :", (*u).Dir[noUser].name)
  	fmt.Println("Job\t :", (*u).Dir[noUser].job)
 	fmt.Println("Address\t :", (*u).Dir[noUser].address)
 }
