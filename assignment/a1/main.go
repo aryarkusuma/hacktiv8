@@ -11,6 +11,7 @@ type BioUser struct {
 	name string
 	job string
 	address string
+	reason string
 }
 
 type UserDir struct {
@@ -58,9 +59,9 @@ func noUserArg(userDirLen int) int{
 
 func newUser() []BioUser{
 	
-	return []BioUser{{"Arya","Programmer Php","Depok"}, 
-			 {"Rangga","Programmer Go","Depok"},
-			 {"Kusuma","Programmer Javascript","Depok"}}	
+	return []BioUser{{"Arya","Programmer Php","Depok Timur", "Karena keren"}, 
+			 {"Rangga","Programmer Go","Depok Barat", "Karena mantab saya suka programming"},
+			 {"Kusuma","Programmer Javascript","Jakarta Selatan", "Mau kerja"}}	
 
 }
 
@@ -69,4 +70,5 @@ func (u *UserDir) PrintUser(noUser int){
 	fmt.Println("Name\t :", (*u).Dir[noUser].name)
  	fmt.Println("Job\t :", (*u).Dir[noUser].job)
 	fmt.Println("Address\t :", (*u).Dir[noUser].address)
+	fmt.Println("Reason why choose go\t :", (*u).Dir[noUser].reason)
 }
