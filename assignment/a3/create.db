@@ -1,0 +1,15 @@
+CREATE TABLE "items" (
+    "id" UUID NOT NULL DEFAULT (uuid_generate_v4()) UNIQUE,
+    "code" VARCHAR NOT NULL UNIQUE,
+    "quantity" INT DEFAULT 0, 
+    "created_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "order_id" VARCHAR NOT NULL,
+    CONSTRAINT "users_pkey" PRIMARY KEY ("id")
+);
+
+CREATE TABLE "orders" (
+    "id" UUID NOT NULL DEFAULT (uuid_generate_v4()),
+    "created_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT "orders_pkey" PRIMARY KEY ("id")
+);
+
