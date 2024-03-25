@@ -10,7 +10,8 @@ import (
 
 func DbInit(ctx context.Context) *pgx.Conn {
 	// urlExample := "postgres://arya:arya@localhost:5432/shuttle"
-	conn, err := pgx.Connect(ctx, "postgres://arya:arya@localhost:5432/shuttling")
+	psql := "postgres://arya:arya@localhost:5432/shuttling"
+	conn, err := pgx.Connect(ctx, psql)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Unable to connect to database: %v\n", err)
 		os.Exit(1)

@@ -26,3 +26,8 @@ CREATE TABLE reservation (
     FOREIGN KEY (shuttle_id) REFERENCES shuttle(id),
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
+
+
+CREATE TABLE route_list(
+    route_name VARCHAR(255) NOT NULL
+)
