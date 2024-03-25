@@ -30,11 +30,32 @@ func (DB *Db) Login(c *gin.Context) {
 		return
 	}
 
-	if !IsValid(loginData.Username) || !IsValid(loginData.Password) {
+	if !IsValid(loginData.Username) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Input Data Invalid"})
 		return
 	}
 
+	hashedpw, err := HashPassword(loginData.Password)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Invalid Request"})
+		return
+	}
+
+	var password string
+	err = DB.DB.QueryRow(context.Background(),
+		"SELECT password FROM users WHERE username = $1",
+		loginData.Username).Scan(&password)
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": hashedpw})
+		return
+	}
+
+	checkhash := CheckPasswordHash(loginData.Password, password)
+	if !checkhash {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": hashedpw})
+		return
+	}
 	expirationTime := time.Now().Add(24 * time.Hour)
 	claims := &Claims{
 		Username: loginData.Username,
@@ -65,21 +86,26 @@ func (DB *Db) Register(c *gin.Context) {
 		return
 	}
 
-	if !IsValid(registerData.Username) || !IsValid(registerData.Password) {
+	if !IsValid(registerData.Username) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Input Data Invalid"})
 		return
 	}
 
-	_, err := DB.DB.Exec(context.Background(),
+	hashedpw, err := HashPassword(registerData.Password)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Invalid Request"})
+		return
+	}
+	_, err = DB.DB.Exec(context.Background(),
 		"INSERT INTO users (username, password) VALUES ($1, $2)",
-		registerData.Username, registerData.Password)
+		registerData.Username, hashedpw)
 
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Invalid Request"})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"token": "susceec"})
+	c.JSON(http.StatusCreated, gin.H{"status": "user register complete"})
 }
 
 func AuthMiddleware() gin.HandlerFunc {
@@ -114,6 +140,10 @@ func AuthMiddleware() gin.HandlerFunc {
 }
 
 func IsValid(input string) bool {
+	//Check length input
+	if len(input) < 8 {
+		return false
+	}
 	// Define a regular expression to match alphanumeric characters and underscores
 	reg := regexp.MustCompile(`^[a-zA-Z0-9_]+$`)
 	// Check if the input matches the pattern
@@ -121,6 +151,11 @@ func IsValid(input string) bool {
 }
 
 func HashPassword(password string) (string, error) {
-	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
+	bytes, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 	return string(bytes), err
+}
+
+func CheckPasswordHash(password, hash string) bool {
+	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
+	return err == nil
 }

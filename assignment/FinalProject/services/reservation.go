@@ -54,13 +54,11 @@ func (DB *Db) ReservSeatGin(c *gin.Context) {
 		v.ShuttleId, v.ReservName, v.ReservName, v.SeatNumber, v.UserId)
 
 	if err != nil {
-		fmt.Println((v))
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Invalid Request"})
 		return
 	}
-
 	//
 
-	c.JSON(http.StatusAccepted, gin.H{"count": count})
+	c.JSON(http.StatusBadRequest, gin.H{"count": count})
 
 }

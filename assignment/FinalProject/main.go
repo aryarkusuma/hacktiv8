@@ -20,7 +20,7 @@ func main() {
 
 	router.POST("/login", s.Login)
 
-	router.POST("/reg", s.Register)
+	router.POST("/register", s.Register)
 
 	authGroup := router.Group("/api")
 
