@@ -13,23 +13,18 @@ import (
 
 func main() {
 	db := repository.DbInit(context.Background())
-
 	s := &services.Db{DB: db}
 
 	router := gin.Default()
 
 	router.POST("/login", s.Login)
-
 	router.POST("/register", s.Register)
 
 	authGroup := router.Group("/api")
-
 	authGroup.Use(services.AuthMiddleware())
 
 	authGroup.POST("/reserveseat", s.ReservSeatGin)
-
 	authGroup.POST("/postshuttle", s.PostShuttleGin)
-
 	authGroup.GET("/shuttlelist", s.GetShuttlesGin)
 
 	router.Run(":8080")

@@ -83,5 +83,5 @@ func (DB *Db) GetShuttlesGin(c *gin.Context) {
 
 	// Print JSON data
 
-	c.SecureJSON(http.StatusAccepted, gin.H{"data": shuttles})
+	c.SecureJSON(http.StatusOK, gin.H{"data": shuttles})
 }

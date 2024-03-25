@@ -71,7 +71,7 @@ func (DB *Db) Login(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"token": tokenString})
+	c.JSON(http.StatusAccepted, gin.H{"token": tokenString})
 }
 
 func (DB *Db) Register(c *gin.Context) {

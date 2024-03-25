@@ -2,7 +2,6 @@ package services
 
 import (
 	"context"
-	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -43,7 +42,6 @@ func (DB *Db) ReservSeatGin(c *gin.Context) {
 		v.ShuttleId, v.SeatNumber).Scan(&count)
 
 	if err != nil {
-		fmt.Println((v))
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Invalid Request"})
 		return
 	}
