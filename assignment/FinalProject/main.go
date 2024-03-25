@@ -23,9 +23,10 @@ func main() {
 	authGroup := router.Group("/api")
 	authGroup.Use(services.AuthMiddleware())
 
-	authGroup.POST("/reserveseat", s.ReservSeatGin)
-	authGroup.POST("/postshuttle", s.PostShuttleGin)
-	authGroup.GET("/shuttlelist", s.GetShuttlesGin)
+	authGroup.POST("/reserve-seat", s.ReservSeatGin)
+	authGroup.POST("/post-shuttle", s.PostShuttleGin)
+	authGroup.GET("/shuttle-list", s.GetShuttlesGin)
+	authGroup.GET("/reserved-list", s.GetReservedSeats)
 
 	router.Run(":8080")
 

@@ -2,6 +2,7 @@ package services
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 	"regexp"
 	"time"
@@ -15,11 +16,12 @@ var jwtKey = []byte("aryaranggakusuma")
 
 type Claims struct {
 	Username string `json:"username"`
+	UserId   string `json:"user_id"`
 	jwt.StandardClaims
 }
 
 func (DB *Db) Login(c *gin.Context) {
-
+	fmt.Println(c.GetString("Id"))
 	var loginData struct {
 		Username string `json:"username"`
 		Password string `json:"password"`
@@ -41,10 +43,11 @@ func (DB *Db) Login(c *gin.Context) {
 		return
 	}
 
+	var userId string
 	var password string
 	err = DB.DB.QueryRow(context.Background(),
-		"SELECT password FROM users WHERE username = $1",
-		loginData.Username).Scan(&password)
+		"SELECT id, password FROM users WHERE username = $1",
+		loginData.Username).Scan(&userId, &password)
 
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": hashedpw})
@@ -59,6 +62,7 @@ func (DB *Db) Login(c *gin.Context) {
 	expirationTime := time.Now().Add(24 * time.Hour)
 	claims := &Claims{
 		Username: loginData.Username,
+		UserId:   userId,
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: expirationTime.Unix(),
 		},
@@ -110,6 +114,8 @@ func (DB *Db) Register(c *gin.Context) {
 
 func AuthMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
+		fmt.Println(c.GetString("Id"))
+		var claims Claims
 		tokenString := c.GetHeader("Authorization")
 		if tokenString == "" {
 			c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
@@ -119,7 +125,7 @@ func AuthMiddleware() gin.HandlerFunc {
 
 		token, err := jwt.ParseWithClaims(
 			tokenString,
-			&Claims{}, func(token *jwt.Token) (interface{}, error) {
+			&claims, func(token *jwt.Token) (interface{}, error) {
 				return jwtKey, nil
 			})
 
@@ -129,12 +135,14 @@ func AuthMiddleware() gin.HandlerFunc {
 			return
 		}
 
+		fmt.Println(claims.UserId)
 		if !token.Valid {
 			c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
 			c.Abort()
 			return
 		}
 
+		c.Set("Id", claims.UserId)
 		c.Next()
 	}
 }
